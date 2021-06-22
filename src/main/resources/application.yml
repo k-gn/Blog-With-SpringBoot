@@ -19,8 +19,12 @@ spring:
     hibernate:
       ddl-auto: create
       naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 변수명 그대로 테이블 컬럼 생성 (_기법 전략도 있다)
+#        SpringBoot 2.0.x 에서 GeverateValue는 Hibernate의 id생성 전략을 따라간다.
+#        Hibernate의 id생성 전략은 모든테이블이 seq를 공유한다.
+#        즉 a테이블에서 1~5까지 seq를 생성했다면 b테이블에서 seq생성시 6부터 시작한다는것.
+#        아래 해결방법처럼 설정하면 이전처럼 각 테이블에서 seq는 1부터 생성되게 된다.
+      use-new-id-generator-mappings: false # 즉 jpa의 기본 넘버링 전략을 쓰지 않는 것
     show-sql: true
     properties:
       hibernate.format_sql: true
