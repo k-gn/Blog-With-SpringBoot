@@ -31,6 +31,7 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
+    // 보통 권한은 권한객체 또는 Enum으로 선언한다.
     // @ColumnDefault("'user'") // 기본값 ('' 써서 문자임을 알려줘야한다.)
     // DB 는 RoleType 이라는게 없다.
     // @Enumerated : 해당 Enum을 엔티티에서 사용할 수 있다.
