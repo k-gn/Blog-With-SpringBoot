@@ -17,7 +17,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl # 변수명 그대로 테이블 컬럼 생성 (_기법 전략도 있다)
 #        SpringBoot 2.0.x 에서 GeverateValue는 Hibernate의 id생성 전략을 따라간다.

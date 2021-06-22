@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,6 +15,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+// @DynamicInsert // null 인 데이터는 insert 에서 제외
 public class User {
 
     @Id
@@ -31,8 +31,13 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
-    @ColumnDefault("'user'") // 기본값 ('' 써서 문자임을 알려줘야한다.)
-    private String role;
+    // @ColumnDefault("'user'") // 기본값 ('' 써서 문자임을 알려줘야한다.)
+    // DB 는 RoleType 이라는게 없다.
+    // @Enumerated : 해당 Enum을 엔티티에서 사용할 수 있다.
+    // EnumType.ORDINAL : enum 순서 값을 DB에 저장
+    // EnumType.STRING : enum 이름을 DB에 저장
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
     @CreationTimestamp // 현재시간 자동 입력
     private Timestamp createDate;
