@@ -3,12 +3,13 @@ package com.cos.blog.test;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
+import com.cos.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public class DummyControllerTest {
 
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/dummy/join")
     public String join(User user) { // key=value 를 기본으로 파싱(약속, x-www-form-urlencoded)
@@ -49,16 +53,26 @@ public class DummyControllerTest {
         return pagingUser.getContent();
     }
 
-    @Transactional
+//    @Transactional // 함수 종료 시 자동 commit 이 된다.
     @PutMapping("/dummy/user/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User reqUser) {
 
-        User user = userRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("수정 실패"));
-        user.setPassword(reqUser.getPassword());
-        user.setEmail(reqUser.getEmail());
+//        User user = userRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("수정 실패"));
+//        user.setPassword(reqUser.getPassword());
+//        user.setEmail(reqUser.getEmail());
 //        userRepo.save(user); 
+        User user = userService.update(id, reqUser);
+        // 더티체킹 (변경감지) - @Transactional 필요
+        return user;
+    }
 
-        // 더티체킹
-        return null;
+    @DeleteMapping("/dummy/user/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        try {
+            userRepo.deleteById(id);
+        }catch (EmptyResultDataAccessException e) {
+            return "삭제 실패";
+        }
+        return "삭제 완료";
     }
 }
