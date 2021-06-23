@@ -15,7 +15,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepo;
 
-    @Transactional // 정합성 유지를 위해서도 사용한다. (같은 트랜잭션 내에서는 동일한 데이터를 볼 수 있도록 보장된다. - REPEACTABLE READ)
+    @Transactional // 데이터 변경에 안정성 증가 + 정합성 유지를 위해서도 사용한다. (같은 트랜잭션 내에서는 동일한 데이터를 볼 수 있도록 보장된다. - REPEACTABLE READ)
     public void save(User user) {
         userRepo.save(user);
     }
@@ -28,5 +28,10 @@ public class UserService {
         user.setEmail(reqUser.getEmail());
 
         return user;
+    }
+
+    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지
+    public User login(User user) {
+        return userRepo.findByUsernameAndPassword(user.getUsername(), user.getPassword());
     }
 }
