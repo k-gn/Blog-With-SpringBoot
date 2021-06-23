@@ -22,7 +22,7 @@ public class UserApiController {
     public ResponseDto<Integer> save(@RequestBody User user) {
         user.setRole(RoleType.USER);
         System.out.println(user);
-        int result = userService.save(user);
-        return new ResponseDto<Integer>(HttpStatus.OK, result);
+        userService.save(user);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 }
