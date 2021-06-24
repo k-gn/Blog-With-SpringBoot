@@ -1,7 +1,10 @@
 package com.cos.blog.config;
 
+import com.cos.blog.auth.PrincipalDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -12,7 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration // 빈 등록 : 스프링 컨테이너에서 객체를 관리할 수 있게 하는 것 (IoC 관리)
 @EnableWebSecurity // 시큐리티 필터 추가 = 활성화 된 시큐리티 설정을 해당 파일에서 하겠다.
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 메소드 시큐리티를 사용하기 위한 선언
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalDetailService principalDetailService;
 
     // 비밀번호 암호화를 위한 인코더 등록
     // 여담으로 해쉬를 사용해 원본과 위조본을 구분할 수 있다.
@@ -20,6 +26,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public BCryptPasswordEncoder encodePWD() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(principalDetailService).passwordEncoder(encodePWD());
     }
 
     @Override
@@ -32,7 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/auth/loginForm") // 커스텀 로그인 페이지
-        ; 
+                .loginProcessingUrl("/auth/loginProc") // 시큐리티가 해당 주소로 오는 로그인 요청을 가로챈 후 처리해준다.
+                .defaultSuccessUrl("/") // 로그인 성공 후 동작할 주소
+        ;
+
+        // 시큐리티는 /logout 요청으로 로그아웃 처리를 해준다.
     }
 
 }
