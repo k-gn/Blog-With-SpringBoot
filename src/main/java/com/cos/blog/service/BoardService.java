@@ -36,4 +36,11 @@ public class BoardService {
     public void delete(Long id) {
         boardRepository.deleteById(id);
     }
+
+    @Transactional
+    public void update(Long id, Board reqBoard) {
+        Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+        board.setTitle(reqBoard.getTitle());
+        board.setContent(reqBoard.getContent());
+    }
 }

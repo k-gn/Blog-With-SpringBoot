@@ -3,7 +3,7 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
   <th:block th:fragment="content">
     <div class="container">
-      <button th:if="${board.user.id} == ${#authentication.principal.user.id}" id="btn-update" class="btn btn-warning">수정</button>
+      <a th:if="${board.user.id} == ${#authentication.principal.user.id}" th:href="@{/board/{id}/updateForm(id=${board.id})}" id="btn-update" class="btn btn-warning">수정</a>
       <button th:if="${board.user.id} == ${#authentication.principal.user.id}" id="btn-delete" class="btn btn-danger">삭제</button>
       <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
       <br>

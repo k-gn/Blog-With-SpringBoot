@@ -5,16 +5,15 @@
     <div class="container">
 
       <form>
+        <input type="hidden" id="id" th:value="${board.id}">
         <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" name="title" class="form-control" placeholder="Enter title" id="title">
+          <input type="text" name="title" class="form-control" placeholder="Enter title" id="title" th:value="${board.title}">
         </div>
         <div class="form-group">
-          <label for="content">Content:</label>
-          <textarea class="form-control summernote" name="content" rows="5" id="content"></textarea>
+          <textarea class="form-control summernote" name="content" rows="5" id="content" th:utext="${board.content}"></textarea>
         </div>
       </form>
-      <button id="btn-save" class="btn btn-primary">글 등록</button>
+      <button id="btn-update" class="btn btn-primary">글 수정하기</button>
     </div>
   </th:block>
 </th:block>
