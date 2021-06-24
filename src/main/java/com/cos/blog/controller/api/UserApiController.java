@@ -6,6 +6,7 @@ import com.cos.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,13 @@ public class UserApiController {
     public ResponseDto<Integer> save(@RequestBody User user) {
         System.out.println(user);
         userService.save(user);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @PutMapping("/user")
+    public ResponseDto<Integer> update(@RequestBody User user) {
+        System.out.println(user);
+        userService.update(user);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 

@@ -29,11 +29,21 @@ public class UserService {
     @Transactional
     public User update(Long id, User reqUser) {
 
-        User user = userRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("수정 실패"));
+        User user = userRepo.findById(id).orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패"));
         user.setPassword(reqUser.getPassword());
         user.setEmail(reqUser.getEmail());
 
         return user;
+    }
+
+    @Transactional
+    public void update(User user) {
+
+        User persistence = userRepo.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패"));
+        String encPwd = encoder.encode(user.getPassword());
+        persistence.setPassword(encPwd);
+        persistence.setEmail(user.getEmail());
+
     }
 
 //    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지
