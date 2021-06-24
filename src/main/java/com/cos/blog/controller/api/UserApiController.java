@@ -1,7 +1,6 @@
 package com.cos.blog.controller.api;
 
 import com.cos.blog.dto.ResponseDto;
-import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ public class UserApiController {
 
     @PostMapping("/auth/joinProc")
     public ResponseDto<Integer> save(@RequestBody User user) {
-        user.setRole(RoleType.USER);
         System.out.println(user);
         userService.save(user);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
