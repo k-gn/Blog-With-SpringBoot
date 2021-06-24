@@ -41,6 +41,7 @@ let index = {
         // alert('user - save')
         let data = {
             id: $("#id").val(),
+            username: $("#username").val(),
             email: $("#email").val(),
             password: $("#password").val()
         }
