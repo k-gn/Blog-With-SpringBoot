@@ -1,5 +1,6 @@
 package com.cos.blog.service;
 
+import com.cos.blog.auth.PrincipalDetail;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
@@ -37,13 +38,14 @@ public class UserService {
     }
 
     @Transactional
-    public void update(User user) {
+    public void update(User user, PrincipalDetail principal) {
 
         User persistence = userRepo.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패"));
         String encPwd = encoder.encode(user.getPassword());
         persistence.setPassword(encPwd);
         persistence.setEmail(user.getEmail());
 
+        principal.setUser(persistence);
     }
 
 //    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지

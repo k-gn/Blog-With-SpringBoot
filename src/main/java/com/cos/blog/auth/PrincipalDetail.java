@@ -62,4 +62,8 @@ public class PrincipalDetail implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void setUser(User persistence) {
+        this.user = persistence;
+    }
 }
