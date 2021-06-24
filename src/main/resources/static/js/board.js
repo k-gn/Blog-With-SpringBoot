@@ -34,12 +34,11 @@ let index = {
 
     deleteById: function () {
 
-        let id = $("#id").val();
+        let id = $("#id").text();
 
         $.ajax({
             type: "delete",
             url: "/api/board/" + id,
-            contentType: "application/json; charset=utf-8",
             dataType: "json"
         }).done((resp) => {
             console.log(resp);
