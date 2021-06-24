@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <th:block th:fragment="setContent(content)">
     <head>
@@ -18,16 +18,17 @@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- principal : 현재 접근 주체, 보호된 대상에 접근하는 유저 정보 -->
             <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav" th:if="${session.principal} == null">
+                <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/loginForm}">로그인</a>
+                        <a class="nav-link" th:href="@{/auth/loginForm}">로그인</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" th:href="@{/joinForm}">회원가입</a>
+                        <a class="nav-link" th:href="@{/auth/joinForm}">회원가입</a>
                     </li>
                 </ul>
-                <ul class="navbar-nav" th:unless="${session.principal} == null">
+                <ul class="navbar-nav" sec:authorize="isAuthenticated()">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/board/form}">글쓰기</a>
                     </li>

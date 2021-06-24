@@ -30,8 +30,8 @@ public class UserService {
         return user;
     }
 
-    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지
-    public User login(User user) {
-        return userRepo.findByUsernameAndPassword(user.getUsername(), user.getPassword());
-    }
+//    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지
+//    public User login(User user) {
+//        return userRepo.findByUsernameAndPassword(user.getUsername(), user.getPassword());
+//    }
 }
