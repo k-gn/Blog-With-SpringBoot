@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -28,7 +27,6 @@ public class Board {
     @Lob // 대용량 데이터
     private String content;
 
-    @ColumnDefault("0")
     private int count; // 조회수
 
     @ManyToOne(fetch = FetchType.EAGER) // N:1 연관관계

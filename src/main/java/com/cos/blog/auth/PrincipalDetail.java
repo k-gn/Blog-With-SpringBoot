@@ -2,6 +2,7 @@ package com.cos.blog.auth;
 
 import com.cos.blog.model.User;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,6 +16,7 @@ import java.util.Collection;
 // 커스텀 로그인 처리를 위해 꼭 필요하다. ( 안그러면 기본 계정인 user 로만 로그인이 가능,, )
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class PrincipalDetail implements UserDetails {
 
     private User user;
