@@ -41,11 +41,19 @@ public class UserService {
     public void update(User user, PrincipalDetail principal) {
 
         User persistence = userRepo.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("회원 찾기 실패"));
-        String encPwd = encoder.encode(user.getPassword());
-        persistence.setPassword(encPwd);
-        persistence.setEmail(user.getEmail());
 
-        principal.setUser(persistence);
+        if(persistence.getOauth() == null || persistence.getOauth().equals("")) {
+            String encPwd = encoder.encode(user.getPassword());
+            persistence.setPassword(encPwd);
+            persistence.setEmail(user.getEmail());
+            principal.setUser(persistence);
+        }
+
+    }
+
+    @Transactional(readOnly = true)
+    public User findUser(String username) {
+        return userRepo.findByUsername(username).orElseGet(() -> new User());
     }
 
 //    @Transactional(readOnly = true) // SELECT 시 트랜잭션 - 정합성 유지

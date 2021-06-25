@@ -8,27 +8,30 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
-//    @Value("${cos.key}")
-//    private String cosKey;
+    @Value("${cos.key}")
+    private String cosKey;
 
     @GetMapping("/auth/joinForm")
     public String joinForm() {
@@ -46,7 +49,7 @@ public class UserController {
     }
 
     @GetMapping("/auth/kakao/callback")
-    @ResponseBody
+//    @ResponseBody
     public String kakaoCallback(String code) {
 
         RestTemplate rt = new RestTemplate();
@@ -112,25 +115,32 @@ public class UserController {
         }
 
         // User 오브젝트 : username, password, email
-        System.out.println("카카오 아이디(번호) : "+kakaoProfile.getId());
-        System.out.println("카카오 이메일 : "+kakaoProfile.getKakao_account().getEmail());
+//        System.out.println("카카오 아이디(번호) : "+kakaoProfile.getId());
+//        System.out.println("카카오 이메일 : "+kakaoProfile.getKakao_account().getEmail());
 
         // 해당 이메일 유저가 있거나 회원가입을 할 수 있기 때문에 _id 를 붙여준다.
-        System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
-        System.out.println("블로그서버 이메일 : "+kakaoProfile.getKakao_account().getEmail());
-        // 비밀번호는 아예 안넣긴 그러니 uuid로 넣어주기
-        UUID garbagePassword = UUID.randomUUID();
-        System.out.println(garbagePassword);
+//        System.out.println("블로그서버 유저네임 : "+kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId());
+//        System.out.println("블로그서버 이메일 : "+kakaoProfile.getKakao_account().getEmail());
 
-        User user = User.builder()
+//        UUID uuid = UUID.randomUUID();
+//        String password = uuid.toString();
+
+        User kakaoUser = User.builder()
                 .username(kakaoProfile.getKakao_account().getEmail()+"_"+kakaoProfile.getId())
-                .password(garbagePassword.toString())
+                .password(cosKey)
                 .email(kakaoProfile.getKakao_account().getEmail())
+                .oauth("kakao")
                 .build();
         
-        userService.save(user);
+        // 가입자 혹은 비가입자 체크 처리
+        User originUser = userService.findUser(kakaoUser.getUsername());
+        if(originUser.getUsername() == null) {
+            userService.save(kakaoUser);
+        }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(kakaoUser.getUsername(), cosKey));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return response2.getBody();
+        return "redirect:/";
     }
 }
 //https://kauth.kakao.com/oauth/token

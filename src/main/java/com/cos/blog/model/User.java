@@ -22,7 +22,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 30, unique = true)
+    @Column(nullable = false, length = 100, unique = true)
     private String username;
 
     @Column(nullable = false, length = 100)
@@ -39,6 +39,8 @@ public class User {
     // EnumType.STRING : enum 이름을 DB에 저장
     @Enumerated(EnumType.STRING)
     private RoleType role;
+
+    private String oauth;
 
     @CreationTimestamp // 현재시간 자동 입력
     private Timestamp createDate;
