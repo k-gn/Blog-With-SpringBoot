@@ -10,6 +10,9 @@ let index = {
         $("#btn-update").on("click", () => { // this 바인딩을 위해 화살표함수로 사용
             this.update();
         });
+        $("#btn-reply-save").on("click", () => { // this 바인딩을 위해 화살표함수로 사용
+            this.replySave();
+        });
     },
 
     save: function () {
@@ -73,6 +76,28 @@ let index = {
             console.log(resp);
             alert("글수정이 완료되었습니다.");
             location.href="/"
+        }).fail((error) => {
+            console.log(error);
+        });
+    },
+
+    replySave: function () {
+        let data = {
+            content: $("#reply-content").val()
+        }
+        let boardId = $("#boardId").val();
+        console.log(data);
+
+        $.ajax({
+            type: "POST",
+            url: `/api/board/${boardId}/reply`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done((resp) => {
+            console.log(resp);
+            alert("댓글 작성이 완료되었습니다.");
+            location.href=`/board/${data.boardId}`
         }).fail((error) => {
             console.log(error);
         });

@@ -30,7 +30,6 @@ public class BoardController {
     @GetMapping("/board/{id}")
     public String findById(Model model, @PathVariable Long id) {
         model.addAttribute("board", boardService.selectOne(id));
-        System.out.println(boardService.selectOne(id));
         return "board/detail";
     }
 

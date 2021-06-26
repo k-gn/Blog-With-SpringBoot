@@ -1,5 +1,6 @@
 package com.cos.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +37,8 @@ public class Board {
     // mappedBy : 연관관계의 주인이 아니다. (DB에 컬럼을 만들지 않는다.), Reply의 board를 FK로 쓸것임을 알림
     // board 를 select 할 때 같이 가져오기 위해 필요한 것임을 알림
     @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties("board") // 데이터 리턴 시 jackson 라이브러리가 동작하는데 그 때 발생하는 무한참조 방지
+    @OrderBy("id desc") // 정렬
     private List<Reply> replys;
 
     @CreationTimestamp

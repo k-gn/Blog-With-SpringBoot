@@ -26,6 +26,7 @@
 
       <div class="card">
         <form>
+          <input type="hidden" id="boardId" th:value="${board.id}">
           <div class="card-body">
             <textarea id="reply-content" class="form-control" rows="1"></textarea>
           </div>
@@ -37,17 +38,17 @@
       <br />
       <div class="card">
         <div class="card-header">댓글 리스트</div>
-        <ul id="reply-box" class="list-group">
-
-          <li id="reply-1" class="list-group-item d-flex justify-content-between">
-            <div>댓글 내용</div>
-            <div class="d-flex">
-              <div class="font-italic">작성자 &nbsp;</div>
-              <button class="badge">삭제</button>
-            </div>
-          </li>
-
-        </ul>a
+        <ul id="reply--box" class="list-group">
+          <th:block th:each="reply : ${board.replys}">
+            <li th:id="reply-- + ${reply.id}" class="list-group-item d-flex justify-content-between">
+              <div th:utext="${reply.content}">댓글 내용</div>
+              <div class="d-flex">
+                <div class="font-italic">작성자 : [[${reply.user.username}]] &nbsp</div>
+                <button class="badge">삭제</button>
+              </div>
+            </li>
+          </th:block>
+        </ul>
       </div>
 
     </div>

@@ -1,8 +1,10 @@
 package com.cos.blog.service;
 
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
+import com.cos.blog.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
 
     @Transactional
     public void write(Board board, User user) {
@@ -42,5 +45,16 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
         board.setTitle(reqBoard.getTitle());
         board.setContent(reqBoard.getContent());
+    }
+
+    @Transactional
+    public void replyWrite(Reply reply, Long boardId, User user) {
+
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+
+        reply.setUser(user);
+        reply.setBoard(board);
+
+        replyRepository.save(reply);
     }
 }
