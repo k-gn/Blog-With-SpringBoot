@@ -1,9 +1,9 @@
 package com.cos.blog.controller.api;
 
 import com.cos.blog.auth.PrincipalDetail;
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.dto.ResponseDto;
 import com.cos.blog.model.Board;
-import com.cos.blog.model.Reply;
 import com.cos.blog.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,9 +34,12 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
-    @PostMapping("/api/board/{id}/reply")
-    public ResponseDto<Integer> replySave(@PathVariable Long boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principal) {
-        boardService.replyWrite(reply, boardId, principal.getUser());
+    // 데이터를 받을 때 컨트롤러에서 dto를 만들어서 받는게 좋다.
+    @PostMapping("/api/board/{boardId}/reply")
+    public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequestDto replySaveRequestDto) {
+//        boardService.replyWrite(reply, boardId, principal.getUser());
+        System.out.println(replySaveRequestDto);
+        boardService.replyWrite(replySaveRequestDto);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 }

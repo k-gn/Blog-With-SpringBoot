@@ -1,10 +1,11 @@
 package com.cos.blog.service;
 
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
-import com.cos.blog.model.Reply;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
 import com.cos.blog.repository.ReplyRepository;
+import com.cos.blog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,7 @@ public class BoardService {
 
     private final BoardRepository boardRepository;
     private final ReplyRepository replyRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public void write(Board board, User user) {
@@ -48,13 +50,18 @@ public class BoardService {
     }
 
     @Transactional
-    public void replyWrite(Reply reply, Long boardId, User user) {
+    public void replyWrite(ReplySaveRequestDto replySaveRequestDto) {
 
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+//        Board board = boardRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("해당 글을 찾을 수 없습니다."));
+//
+//        User user = userRepository.findById(replySaveRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+//
+//        Reply reply = new Reply();
+//        reply.update(user, board, replySaveRequestDto.getContent());
+//
+//        replyRepository.save(reply);
 
-        reply.setUser(user);
-        reply.setBoard(board);
+        replyRepository.mSave(replySaveRequestDto.getContent(), replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId());
 
-        replyRepository.save(reply);
     }
 }

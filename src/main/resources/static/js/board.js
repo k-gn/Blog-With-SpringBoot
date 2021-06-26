@@ -83,6 +83,8 @@ let index = {
 
     replySave: function () {
         let data = {
+            userId: $("#userId").val(),
+            boardId : $("#boardId").val(),
             content: $("#reply-content").val()
         }
         let boardId = $("#boardId").val();
@@ -97,7 +99,7 @@ let index = {
         }).done((resp) => {
             console.log(resp);
             alert("댓글 작성이 완료되었습니다.");
-            location.href=`/board/${data.boardId}`
+            location.href=`/board/${boardId}`
         }).fail((error) => {
             console.log(error);
         });
